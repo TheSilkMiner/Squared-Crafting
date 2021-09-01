@@ -1,4 +1,3 @@
-!gradle/wrapper/gradle-wrapper.jar
 .idea/
 .gradle/
 build/
@@ -27,6 +26,7 @@ Thumbs.db
 Thumbs.db:encryptable
 [Dd]esktop.ini
 *.lnk
+!gradle/wrapper/gradle-wrapper.jar
 
 run_client/
 run_data/

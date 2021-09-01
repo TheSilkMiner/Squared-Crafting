@@ -24,4 +24,3 @@ pluginManagement {
 }
 
 rootProject.name = "Squared-Crafting"
-

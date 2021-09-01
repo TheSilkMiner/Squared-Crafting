@@ -28,9 +28,9 @@ val gitCommit: String
         val process = ProcessBuilder("git rev-parse --short HEAD").start()
         val input = process.inputStream
         val lines = BufferedReader(InputStreamReader(input)).lines()
-        if (process.waitFor() != 0) "Error while querying Git" else lines.reduce { t, u -> t + u }.get()
+        if (process.waitFor() != 0) "Unable to query Git" else lines.reduce { t, u -> t + u }.get()
     } catch (e: IOException) {
-        "Error while looking up Git: $e"
+        "Unable to run Git"
     }
 
 val buildNumber: String? get() = System.getProperty("BUILD_NUMBER")
@@ -38,19 +38,28 @@ val buildString: String get() = buildNumber?.let { "+build.$it" } ?: ""
 
 val modId = "squared_crafting"
 
+val generated: SourceSet by sourceSets.creating {
+    resources {
+        exclude(".cache")
+    }
+    afterEvaluate {
+        compileClasspath += sourceSets.main.get().output
+    }
+}
+
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(JavaVersion.VERSION_1_8.majorVersion))
 }
 
 ktlint {
-    version.set("0.41.0")
+    version.set("0.42.1")
     debug.set(true)
     verbose.set(true)
     android.set(false)
     outputToConsole.set(true)
     ignoreFailures.set(false)
     enableExperimentalRules.set(true)
-    disabledRules.set(setOf("indent"))
+    disabledRules.set(setOf("indent", "import-ordering"))
     reporters {
         reporter(ReporterType.PLAIN)
         reporter(ReporterType.CHECKSTYLE)
@@ -73,9 +82,9 @@ minecraft {
     mappings("parchment", "2021.08.29-1.16.5")
 
     runs {
-        createDebugLoggingRunConfig("client", modId, sourceSets.main.get())
-        createDebugLoggingRunConfig("server", modId, sourceSets.main.get()) { args("nogui") }
-        createDataGenerationRunConfig("data", modId, sourceSets.main.get())
+        createDebugLoggingRunConfig("client", modId, sourceSets.main.get(), generated)
+        createDebugLoggingRunConfig("server", modId, sourceSets.main.get(), generated) { args("nogui") }
+        createDataGenerationRunConfig("data", modId, sourceSets.main.get(), generated)
     }
 }
 
@@ -97,12 +106,9 @@ dependencies {
     implementation(group = "thedarkcolour", name = "kotlinforforge", version = "1.14.0")
 }
 
-sourceSets {
-    main.get().resources.srcDir("src/generated/resources")
-}
-
 tasks {
     withType<Jar> {
+        from(sourceSets.main.get().output, generated.output)
         manifest {
             attributes(
                 "Name" to "Squared Crafting",
@@ -127,8 +133,7 @@ tasks {
     }
 
     withType<Wrapper> {
-        gradleVersion = "7.1.1"
+        gradleVersion = "7.2"
         distributionType = Wrapper.DistributionType.ALL
     }
 }
-
