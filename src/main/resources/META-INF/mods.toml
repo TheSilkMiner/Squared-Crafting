@@ -1,0 +1,29 @@
+modLoader="kotlinforforge"
+loaderVersion="[1.14,)"
+license="Lesser GNU Public License version 3.0 - https://www.gnu.org/licenses/lgpl-3.0.en.html"
+issueTrackerURL="https://github.com/TheSilkMiner/Squared-Crafting/issues"
+
+[[mods]]
+    modId="squared_crafting"
+    version="${file.jarVersion}"
+    displayName="Squared Crafting"
+    description="Bring crafting tables to the next level, with plenty of tiers and dimensions to choose from."
+    logoFile="squared_crafting_logo.png"
+    logoBlur=false
+    credits="3x1t_5tyl3 for the ideas and models"
+    authors="TheSilkMiner"
+    displayURL="https://will.be.replaced.com"
+
+[[dependencies.squared_crafting]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.squared_crafting]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
