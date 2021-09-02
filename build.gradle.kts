@@ -43,9 +43,6 @@ val generated: SourceSet by sourceSets.creating {
     resources {
         exclude(".cache")
     }
-    afterEvaluate {
-        compileClasspath += sourceSets.main.get().output
-    }
 }
 
 java {
@@ -136,6 +133,8 @@ dependencies {
     runtimeOnly(fg.deobf(group = "mezz.jei", name = "jei-1.16.5", version = "7.7.1.121"))
 
     implementation(group = "thedarkcolour", name = "kotlinforforge", version = "1.14.0")
+
+    implementation(generated.output)
 }
 
 tasks {
@@ -155,6 +154,7 @@ tasks {
                 "Automatic-Module-Name" to "net.thesilkminer.mc.squaredcrafting"
             )
         }
+        includeEmptyDirs = false
     }
 
     withType<KotlinCompile> {
