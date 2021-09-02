@@ -3,6 +3,7 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import wtf.gofancy.fancygradle.script.extensions.createDataGenerationRunConfig
 import wtf.gofancy.fancygradle.script.extensions.createDebugLoggingRunConfig
 import wtf.gofancy.fancygradle.script.extensions.curseForge
+import wtf.gofancy.fancygradle.script.extensions.deobf
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -95,13 +96,44 @@ repositories {
     mavenCentral()
     curseForge()
     maven {
+        name = "BlameJared"
+        url = uri("https://maven.blamejared.com/")
+
+        content {
+            includeGroup("com.blamejared.crafttweaker")
+        }
+    }
+    maven {
         name = "Kotlin for Forge"
         url = uri("https://thedarkcolour.github.io/KotlinForForge")
+
+        content {
+            includeGroup("thedarkcolour")
+        }
+    }
+    maven {
+        name = "Progwml6"
+        url = uri("https://dvs1.progwml6.com/files/maven/")
+
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
+    maven {
+        name = "ModMaven" // fallback, hence why last
+        url = uri("https://modmaven.k-4u.nl")
     }
 }
 
 dependencies {
     minecraft(group = "net.minecraftforge", name = "forge", version = "1.16.5-36.2.4")
+
+    annotationProcessor(group = "com.blamejared.crafttweaker", name = "Crafttweaker_Annotation_Processors-1.16.5", version = "1.0.0.414")
+
+    implementation(fg.deobf(group = "com.blamejared.crafttweaker", name = "CraftTweaker-1.16.5", version = "7.1.2.414"))
+
+    compileOnly(fg.deobf(group = "mezz.jei", name = "jei-1.16.5", version = "7.7.1.121", classifier = "api"))
+    runtimeOnly(fg.deobf(group = "mezz.jei", name = "jei-1.16.5", version = "7.7.1.121"))
 
     implementation(group = "thedarkcolour", name = "kotlinforforge", version = "1.14.0")
 }
