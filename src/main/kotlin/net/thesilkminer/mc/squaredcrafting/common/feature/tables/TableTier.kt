@@ -32,45 +32,53 @@ internal enum class TableTier(
     HUGE(
         11U,
         "huge",
-        BlockProperties(material = Material.METAL, strength = 12.5, tool = ToolType.PICKAXE, toolLevel = 1),
+        BlockProperties(material = Material.METAL, strength = 12.5, tool = ToolType.PICKAXE, toolLevel = 1, modelKind = ModelKind.METAL),
         ItemProperties(rarity = Rarity.UNCOMMON)
     ),
     HUMONGOUS(
         13U,
         "humongous",
-        BlockProperties(material = Material.METAL, strength = 20.9, tool = ToolType.PICKAXE, toolLevel = 2),
+        BlockProperties(material = Material.METAL, strength = 20.9, tool = ToolType.PICKAXE, toolLevel = 2, modelKind = ModelKind.METAL),
         ItemProperties(rarity = Rarity.UNCOMMON)
     ),
     COLOSSAL(
         15U,
         "colossal",
-        BlockProperties(material = Material.METAL, strength = 30.5, tool = ToolType.PICKAXE, toolLevel = 2),
+        BlockProperties(material = Material.METAL, strength = 30.5, tool = ToolType.PICKAXE, toolLevel = 2, modelKind = ModelKind.METAL),
         ItemProperties(rarity = Rarity.UNCOMMON)
     ),
     TEXTURE(
         16U,
         "texture",
-        BlockProperties(material = Material.WOOL, strength = 1.5, soundType = SoundType.WOOL, requiresTool = false),
+        BlockProperties(material = Material.WOOL, strength = 1.5, soundType = SoundType.WOOL, requiresTool = false, modelKind = ModelKind.SOFT),
         ItemProperties(rarity = Rarity.EPIC, hasFoil = true)
     ),
     ABSURD(
         17U,
         "absurd",
-        BlockProperties(material = Material.HEAVY_METAL, strength = 54.0, resistance = 420.0, tool = ToolType.PICKAXE, toolLevel = 3),
+        BlockProperties(material = Material.HEAVY_METAL, strength = 54.0, resistance = 420.0, tool = ToolType.PICKAXE, toolLevel = 3, modelKind = ModelKind.HEAVY),
         ItemProperties(rarity = Rarity.RARE)
     ),
     ASTRONOMICAL(
         19U,
         "astronomical",
-        BlockProperties(material = Material.HEAVY_METAL, strength = 54.0, resistance = 1200.0, tool = ToolType.PICKAXE, toolLevel = 3),
-        ItemProperties(rarity = Rarity.RARE)
+        BlockProperties(material = Material.HEAVY_METAL, strength = 54.0, resistance = 1200.0, tool = ToolType.PICKAXE, toolLevel = 3, modelKind = ModelKind.HEAVY),
+        ItemProperties(rarity = Rarity.RARE, isExplosionResistant = true)
     ),
     HOLY_SHIT(
         21U,
         "omg",
-        BlockProperties(material = Material.HEAVY_METAL, strength = 100.0, resistance = 8064.0, soundType = SoundType.ANVIL, tool = ToolType.PICKAXE, toolLevel = 3),
-        ItemProperties(rarity = Rarity.EPIC, stackSize = 1U, hasFoil = true)
+        BlockProperties(material = Material.HEAVY_METAL, strength = 100.0, resistance = 8064.0, soundType = SoundType.ANVIL, tool = ToolType.PICKAXE, toolLevel = 3, modelKind = ModelKind.SHIT),
+        ItemProperties(rarity = Rarity.EPIC, stackSize = 1U, hasFoil = true, isExplosionResistant = true)
     );
+
+    internal enum class ModelKind(internal val id: String) {
+        WOOD("wood"),
+        METAL("metal"),
+        HEAVY("heavy"),
+        SOFT("soft"),
+        SHIT("damn")
+    }
 
     internal data class BlockProperties(
         val material: Material = Material.WOOD,
@@ -80,13 +88,15 @@ internal enum class TableTier(
         val requiresTool: Boolean = true,
         val tool: ToolType = ToolType.AXE,
         val toolLevel: Int = 0,
-        val hasInventory: Boolean = true
+        val hasInventory: Boolean = true,
+        val modelKind: ModelKind = ModelKind.WOOD
     )
 
     internal data class ItemProperties(
         val rarity: Rarity = Rarity.COMMON,
         val stackSize: UByte = 64U,
-        val hasFoil: Boolean = false
+        val hasFoil: Boolean = false,
+        val isExplosionResistant: Boolean = false
     )
 
     override fun toString(): String = "${this.name}@[${this.blockData}/${this.itemData}]"

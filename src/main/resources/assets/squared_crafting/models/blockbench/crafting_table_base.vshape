@@ -1,0 +1,1 @@
+VoxelShapes.join(Block.box(0, 0, 0, 16, 13, 16), VoxelShapes.join(Block.box(1, 1, 0, 15, 5, 16), Block.box(0, 1, 1, 16, 5, 15), IBooleanFunction.OR), IBooleanFunction.NOT_SAME)
