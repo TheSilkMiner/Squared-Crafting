@@ -188,7 +188,7 @@ private class SquaredBlockStatesAndModelsProvider(generator: DataGenerator, help
     private fun <T : ModelBuilder<T>> T.defaultTransforms(): T =
         this.transforms()
             .transform(ModelBuilder.Perspective.GUI)
-            .rotation(30.0F, 255.0F, 0.0F) // TODO("Default is 225.0F, though 255.0F doesn't look bad")
+            .rotation(30.0F, 225.0F, 0.0F)
             .scale(0.625F)
             .end()
             .transform(ModelBuilder.Perspective.GROUND)
