@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.IDataProvider
 import net.minecraft.data.LootTableProvider
+import net.minecraft.item.Item
 import net.minecraft.loot.ConstantRange
 import net.minecraft.loot.ItemLootEntry
 import net.minecraft.loot.LootParameterSet
@@ -22,6 +23,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.generators.BlockModelBuilder
 import net.minecraftforge.client.model.generators.BlockStateProvider
 import net.minecraftforge.client.model.generators.ItemModelBuilder
+import net.minecraftforge.client.model.generators.ItemModelProvider
 import net.minecraftforge.client.model.generators.ModelBuilder
 import net.minecraftforge.client.model.generators.loaders.CompositeModelBuilder
 import net.minecraftforge.common.data.ExistingFileHelper
@@ -32,6 +34,7 @@ import net.thesilkminer.mc.squaredcrafting.MOD_ID
 import net.thesilkminer.mc.squaredcrafting.MOD_NAME
 import net.thesilkminer.mc.squaredcrafting.common.feature.tables.TableTier
 import net.thesilkminer.mc.squaredcrafting.common.tables
+import net.thesilkminer.mc.squaredcrafting.common.transparentDye
 import net.thesilkminer.mc.squaredcrafting.dataGenMarker
 import net.thesilkminer.mc.squaredcrafting.logger
 import java.util.function.BiConsumer
@@ -67,6 +70,8 @@ private object DataGeneratorHandler {
 private class SquaredBlockStatesAndModelsProvider(generator: DataGenerator, helper: ExistingFileHelper) : BlockStateProvider(generator, MOD_ID, helper) {
     override fun registerStatesAndModels() {
         this.addTables()
+
+        this.itemModels().normalItem(transparentDye)
     }
 
     private fun addTables() {
@@ -158,8 +163,6 @@ private class SquaredBlockStatesAndModelsProvider(generator: DataGenerator, help
                     }
                 }
 
-            /*
-            // TODO("Add back when Forge is going to cooperate about everything")
             this.itemModels()
                 .getBuilder("item/${block().asItem().registryName?.path}")
                 .customLoader { parent, helper -> CompositeModelBuilder.begin(parent, helper) }
@@ -170,13 +173,17 @@ private class SquaredBlockStatesAndModelsProvider(generator: DataGenerator, help
                     }
                 }
                 .end()
-             */
-            this.itemModels()
-                .getBuilder("item/${block().asItem().registryName?.path}")
-                .parent(base)
                 .defaultTransforms()
         }
     }
+
+    private fun ItemModelProvider.normalItem(item: Item, texture: String = item.registryName?.path ?: error("null")) =
+        this.singleTexture(
+            "item/${item.registryName?.path}",
+            this.mcLoc("item/generated"),
+            "layer0",
+            this.modLoc("item/$texture")
+        )
 
     private fun <T : ModelBuilder<T>> T.defaultTransforms(): T =
         this.transforms()
